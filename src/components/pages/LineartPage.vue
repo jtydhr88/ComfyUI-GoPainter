@@ -19,7 +19,6 @@
           </template>
         </Card>
 
-        <!-- 图片上传和预览区域 -->
         <div v-if="!store.previewImage">
           <ImageUpload
             v-model:uploadedFile="store.uploadedFile"
@@ -76,7 +75,6 @@
           @update:prompt="store.setPrompt"
         />
 
-        <!-- Processing Status Display -->
         <Card v-if="wsClient.status.visible" class="rounded-lg shadow-md border border-gray-200">
           <template #title>
             <span class="text-lg font-semibold text-gray-800">Processing Status</span>
@@ -131,20 +129,17 @@ import OutputSettings from '@/components/common/OutputSettings.vue'
 import OutputDisplay from '@/components/common/OutputDisplay.vue'
 
 import { useLineartStore } from '@/stores/useLineartStore'
-import { ComfyUIWebSocket } from '@/utils/websocket' // 使用调试版本
+import { ComfyUIWebSocket } from '@/utils/websocket'
 
 const store = useLineartStore()
 const outputImage = ref(null)
 
-// 创建 WebSocket 客户端实例
 const wsClient = new ComfyUIWebSocket()
 
-// 设置回调函数 - 添加详细日志
 wsClient
   .onResult((result) => {
     console.log('🎯 LineartPage: Received result in onResult callback:', result)
 
-    // 检查结果结构
     if (result) {
       console.log('🔍 LineartPage: Result type:', typeof result)
       console.log('🔍 LineartPage: Result keys:', Object.keys(result))
@@ -205,7 +200,6 @@ const canSend = computed(() => {
   return result
 })
 
-// Remove preview image
 function removePreview() {
   console.log('🗑️ LineartPage: Removing preview')
   store.setPreviewImage(null)
@@ -272,7 +266,7 @@ const processImage = async () => {
 
     if (result.prompt_id) {
       console.log('🔗 LineartPage: Connecting WebSocket with promptId:', result.prompt_id)
-      // 使用 WebSocket 客户端连接监控进度
+
       await wsClient.connect(result.prompt_id)
       console.log('✅ LineartPage: WebSocket connected successfully')
     } else {
@@ -296,7 +290,6 @@ const reset = () => {
   wsClient.close()
 }
 
-// Cleanup on component unmount
 onUnmounted(() => {
   console.log('🧹 LineartPage: Component unmounting, cleaning up')
   wsClient.close()

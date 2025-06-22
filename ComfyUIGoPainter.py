@@ -1,6 +1,3 @@
-import folder_paths
-import nodes
-
 class ComfyUIGoPainter:
     def __init__(self):
         pass

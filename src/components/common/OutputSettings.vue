@@ -40,7 +40,6 @@ import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'
 
-// Props
 const props = defineProps({
   transparent: {
     type: Boolean,
@@ -56,10 +55,8 @@ const props = defineProps({
   }
 })
 
-// Emits
 const emit = defineEmits(['update:transparent', 'send'])
 
-// Methods
 const updateTransparent = (value) => {
   emit('update:transparent', value)
 }

@@ -1,4 +1,3 @@
-// composables/useComfyWebSocket.ts
 import { onUnmounted } from 'vue'
 import { ComfyUIWebSocket, type ExecutionResult, type ProcessStatus } from '@/utils/websocket'
 
@@ -17,10 +16,8 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
     autoCleanup = true
   } = options
 
-  // 创建 WebSocket 客户端实例
   const wsClient = new ComfyUIWebSocket()
 
-  // 设置回调函数
   if (onResult) {
     wsClient.onResult(onResult)
   }
@@ -33,7 +30,6 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
     wsClient.onStatusChange(onStatusChange)
   }
 
-  // 发送请求并监控进度的通用方法
   const executeTask = async (
     apiEndpoint: string,
     formData: FormData,
@@ -61,7 +57,6 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
       console.log('Received response:', result)
 
       if (result.prompt_id) {
-        // 使用 WebSocket 连接监控进度
         await wsClient.connect(result.prompt_id)
         return result
       } else {
@@ -75,7 +70,6 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
     }
   }
 
-  // 图像处理任务
   const processImage = async (
     apiEndpoint: string,
     file: File | null,
@@ -87,7 +81,6 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
       formData.append('image', file)
     }
 
-    // 添加参数
     for (const [key, value] of Object.entries(params)) {
       formData.append(key, value.toString())
     }
@@ -95,7 +88,6 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
     return executeTask(apiEndpoint, formData)
   }
 
-  // 获取智能建议
   const getSmartSuggestions = async (file: File) => {
     const formData = new FormData()
     formData.append('image', file)
@@ -103,7 +95,6 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
     return executeTask('/gopainter/api/smart-suggestions', formData)
   }
 
-  // 处理 Lineart 任务
   const processLineart = async (
     file: File,
     params: {
@@ -117,7 +108,6 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
     return processImage('/gopainter/api/test', file, params)
   }
 
-  // 处理 Coloring 任务
   const processColoring = async (
     lineDrawingFile: File,
     underpaintingFile: File | null,
@@ -143,7 +133,6 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
     return executeTask('/gopainter/api/coloring', formData)
   }
 
-  // 获取状态文本的辅助方法
   const getStatusText = (taskType: string = 'task') => {
     switch (wsClient.status.status) {
       case 'connecting':
@@ -161,37 +150,30 @@ export function useComfyWebSocket(options: UseComfyWebSocketOptions = {}) {
     }
   }
 
-  // 清理方法
   const cleanup = () => {
     wsClient.close()
   }
 
-  // 自动清理
   if (autoCleanup) {
     onUnmounted(cleanup)
   }
 
   return {
-    // WebSocket 客户端和状态
     wsClient,
     status: wsClient.status,
 
-    // 通用方法
     executeTask,
     processImage,
 
-    // 特定任务方法
     getSmartSuggestions,
     processLineart,
     processColoring,
 
-    // 辅助方法
     getStatusText,
     cleanup
   }
 }
 
-// 预定义的任务类型
 export const TASK_TYPES = {
   LINEART: 'lineart',
   COLORING: 'coloring',

@@ -55,7 +55,6 @@ import Card from 'primevue/card'
 import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'
 
-// Props
 const props = defineProps({
   image: {
     type: String,
@@ -63,27 +62,22 @@ const props = defineProps({
   }
 })
 
-// Emits
 const emit = defineEmits(['like', 'download', 'share', 'remove'])
 
-// Data
 const loading = ref(false)
 
-// Watch for image changes to show loading state
 watch(() => props.image, (newImage, oldImage) => {
   if (newImage && newImage !== oldImage) {
     loading.value = true
   }
 })
 
-// Methods
 const onImageLoad = () => {
   loading.value = false
 }
 
 const likeImage = () => {
   emit('like', props.image)
-  // Show toast or feedback
   console.log('Image liked!')
 }
 
@@ -105,14 +99,12 @@ const shareImage = async () => {
 
   try {
     if (navigator.share) {
-      // Use native sharing if available
       await navigator.share({
         title: 'AI Processed Image',
         text: 'Check out this AI-processed image!',
         url: props.image
       })
     } else {
-      // Fallback: copy to clipboard
       await navigator.clipboard.writeText(props.image)
       console.log('Image URL copied to clipboard!')
     }

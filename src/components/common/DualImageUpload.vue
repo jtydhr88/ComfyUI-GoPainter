@@ -23,7 +23,6 @@
         </div>
       </div>
 
-      <!-- Paste from clipboard button -->
       <div class="mt-4 text-center">
         <Button
           label="Paste from clipboard"
@@ -33,7 +32,6 @@
         />
       </div>
 
-      <!-- Preview uploaded image -->
       <div v-if="previewImage" class="mt-4 relative">
         <img :src="previewImage" alt="Uploaded preview" class="w-full h-48 object-cover rounded-lg" />
         <Button
@@ -52,7 +50,6 @@ import Card from 'primevue/card'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
 
-// Props
 const props = defineProps({
   title: {
     type: String,
@@ -60,14 +57,11 @@ const props = defineProps({
   }
 })
 
-// Emits
 const emit = defineEmits(['file-selected'])
 
-// Data
 const previewImage = ref(null)
 const uploadedFile = ref(null)
 
-// Methods
 const onFileSelect = (event) => {
   const file = event.files[0]
   handleFile(file)

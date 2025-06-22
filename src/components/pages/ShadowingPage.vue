@@ -1,27 +1,23 @@
 <template>
   <div class="min-h-screen">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-      <!-- Left Panel - Input -->
+
       <div class="space-y-6">
-        <!-- Step 1: Generate Shadow -->
         <StepSection
           title="STEP 1: Generate Shadow"
           :step-number="1"
           :is-active="currentStep >= 1"
         >
-          <!-- Line Drawing Input Field -->
           <DualImageUpload
             title="Line Drawing Input Field"
             @file-selected="onLineDrawingSelect"
           />
 
-          <!-- Undercoloring Input Field (Optional) -->
           <DualImageUpload
             title="Undercoloring Input Field (Optional)"
             @file-selected="onUndercoloringSelect"
           />
 
-          <!-- Step 1 Actions -->
           <StepActions
             :can-send="canGenerateShadow"
             :processing="step1Processing"
@@ -30,14 +26,12 @@
           />
         </StepSection>
 
-        <!-- Step 2: Convert Shadow -->
         <StepSection
           title="STEP 2: Convert Shadow"
           :step-number="2"
           :is-active="currentStep >= 2"
           :is-enabled="step1Completed"
         >
-          <!-- Shadow Parameter Settings -->
           <ShadowParameterSettings
             v-model:color="shadowParams.color"
             v-model:light-source-depth="shadowParams.lightSourceDepth"
@@ -46,7 +40,6 @@
             v-model:use-toon-shading="shadowParams.useToonShading"
           />
 
-          <!-- Step 2 Actions -->
           <StepActions
             :can-send="canConvertShadow"
             :processing="step2Processing"
@@ -59,7 +52,6 @@
         </StepSection>
       </div>
 
-      <!-- Right Panel - Output -->
       <div class="lg:sticky lg:top-4 lg:h-fit">
         <Card class="rounded-lg shadow-md border border-gray-200">
           <template #title>
@@ -67,7 +59,6 @@
           </template>
           <template #content>
             <div class="space-y-6">
-              <!-- 3D Shadow Output -->
               <div class="space-y-3">
                 <div class="border-b border-gray-200 pb-2">
                   <h3 class="text-md font-medium text-gray-800">3D Shadow</h3>
@@ -94,7 +85,6 @@
                 </div>
               </div>
 
-              <!-- Anime Shadow Output -->
               <div class="space-y-3">
                 <div class="border-b border-gray-200 pb-2">
                   <h3 class="text-md font-medium text-gray-800">Anime Shadow</h3>
@@ -137,19 +127,16 @@ import StepSection from '../common/StepSection.vue'
 import StepActions from '../common/StepActions.vue'
 import ShadowParameterSettings from '../common/ShadowParameterSettings.vue'
 
-// Data
 const lineDrawingFile = ref(null)
 const undercoloringFile = ref(null)
 const shadowOutput3D = ref(null)
 const shadowOutputAnime = ref(null)
 
-// Step management
 const currentStep = ref(1)
 const step1Completed = ref(false)
 const step1Processing = ref(false)
 const step2Processing = ref(false)
 
-// Shadow parameters
 const shadowParams = ref({
   color: '#000000',
   lightSourceDepth: 0,
@@ -158,7 +145,6 @@ const shadowParams = ref({
   useToonShading: false
 })
 
-// Computed
 const canGenerateShadow = computed(() => {
   return lineDrawingFile.value !== null
 })
@@ -167,7 +153,6 @@ const canConvertShadow = computed(() => {
   return step1Completed.value && !step1Processing.value
 })
 
-// Methods
 const onLineDrawingSelect = (file) => {
   lineDrawingFile.value = file
 }
@@ -186,7 +171,6 @@ const generateShadow = () => {
     undercoloring: undercoloringFile.value?.name
   })
 
-  // Simulate processing
   setTimeout(() => {
     shadowOutput3D.value = `data:image/svg+xml;base64,${btoa(`<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#f0f0f0"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#333" text-anchor="middle" dy=".3em">3D Shadow Result</text></svg>`)}`
     step1Processing.value = false
@@ -202,9 +186,7 @@ const convertShadow = () => {
 
   console.log('Converting Shadow with parameters:', shadowParams.value)
 
-  // Simulate processing
   setTimeout(() => {
-    // Update 3D shadow with parameters applied
     shadowOutput3D.value = `data:image/svg+xml;base64,${btoa(`<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#e0e0e0"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#333" text-anchor="middle" dy=".3em">Enhanced 3D Shadow</text></svg>`)}`
     step2Processing.value = false
   }, 2000)
@@ -215,13 +197,11 @@ const convertToAnime = () => {
 
   console.log('Converting to Anime Shadow...')
 
-  // Simulate anime conversion
   setTimeout(() => {
     shadowOutputAnime.value = `data:image/svg+xml;base64,${btoa(`<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#ffe0e6"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#333" text-anchor="middle" dy=".3em">Anime Shadow Result</text></svg>`)}`
   }, 1500)
 }
 
-// Reset function
 const reset = () => {
   lineDrawingFile.value = null
   undercoloringFile.value = null
@@ -240,7 +220,6 @@ const reset = () => {
   }
 }
 
-// Expose methods for parent component
 defineExpose({
   reset
 })

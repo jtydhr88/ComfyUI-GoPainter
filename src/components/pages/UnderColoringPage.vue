@@ -1,28 +1,23 @@
 <template>
   <div class="min-h-screen">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-      <!-- Left Panel - Input -->
       <div class="space-y-6">
-        <!-- Line Drawing Input Field -->
         <DualImageUpload
           title="Line Drawing Input Field"
           @file-selected="onLineDrawingSelect"
         />
 
-        <!-- Color Hint Input Field -->
         <DualImageUpload
           title="Color Hint Input Field"
           @file-selected="onColorHintSelect"
         />
 
-        <!-- Prompt Settings -->
         <PromptSettings
           :prompt="store.prompt"
           :can-get-suggestions="canSend"
           @update:prompt="store.setPrompt"
         />
 
-        <!-- Send and Convert Actions -->
         <SendConvertActions
           :can-send="canSend"
           :can-convert="canConvert"
@@ -31,7 +26,6 @@
         />
       </div>
 
-      <!-- Right Panel - Output -->
       <div class="lg:sticky lg:top-4 lg:h-fit">
         <OutputDisplay :image="outputImage" />
       </div>
@@ -46,7 +40,6 @@ import PromptSettings from '@/components/common/PromptSettings.vue'
 import SendConvertActions from '@/components/common/SendConvertActions.vue'
 import OutputDisplay from '@/components/common/OutputDisplay.vue'
 
-// Data
 const lineDrawingFile = ref(null)
 const colorHintFile = ref(null)
 const outputImage = ref(null)
@@ -62,13 +55,12 @@ const updatePrompt = (value) => {
 const reset = () => {
   params.value = {
     prompt: ''
-    // 移除 autoPrompt: false
   }
   lineDrawingFile.value = null
   colorHintFile.value = null
   outputImage.value = null
 }
-// Computed
+
 const canSend = computed(() => {
   return lineDrawingFile.value !== null
 })
@@ -77,7 +69,6 @@ const canConvert = computed(() => {
   return outputImage.value !== null
 })
 
-// Methods
 const onLineDrawingSelect = (file) => {
   lineDrawingFile.value = file
 }
@@ -95,7 +86,6 @@ const processImage = () => {
     colorHint: colorHintFile.value?.name
   })
 
-  // Simulate processing
   setTimeout(() => {
     outputImage.value = `data:image/svg+xml;base64,${btoa(`<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#f0f0f0"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#333" text-anchor="middle" dy=".3em">Under Coloring Result</text></svg>`)}`
   }, 2000)
@@ -105,13 +95,12 @@ const convertToPSD = () => {
   if (!canConvert.value) return
 
   console.log('Converting to PSD format...')
-  // Simulate PSD conversion
+
   setTimeout(() => {
     console.log('PSD conversion completed')
   }, 1000)
 }
 
-// Expose methods for parent component
 defineExpose({
   reset
 })

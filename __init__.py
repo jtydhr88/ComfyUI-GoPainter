@@ -2,12 +2,9 @@ from .ComfyUIGoPainter import NODE_CLASS_MAPPINGS
 import os
 import nodes
 from aiohttp import web
-from datetime import datetime
 import execution
 import logging
 from pathlib import Path
-import random
-import re
 
 js_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "js")
 
@@ -38,10 +35,10 @@ def post_prompt(params, workflow_name):
         with open(json_file_path, 'r') as file:
             p = json.load(file)
     except FileNotFoundError:
-        print(f"文件未找到: {json_file_path}")
+        print(f"File not found: {json_file_path}")
         return web.json_response({"error": "file not found", "node_errors": ""}, status=400)
     except json.JSONDecodeError as e:
-        print(f"JSON解析错误: {e}")
+        print(f"JSON parsed error: {e}")
         return web.json_response({"error": "json parsed error", "node_errors": ""}, status=400)
 
     if workflow_name.startswith("default"):

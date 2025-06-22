@@ -13,7 +13,6 @@
 import { ref } from 'vue'
 import TabMenu from 'primevue/tabmenu'
 
-// Props
 const props = defineProps({
   modelValue: {
     type: Number,
@@ -21,10 +20,8 @@ const props = defineProps({
   }
 })
 
-// Emits
 const emit = defineEmits(['update:modelValue', 'tab-change'])
 
-// Navigation data
 const navItems = ref([
   {label: 'Lineart', icon: 'pi pi-palette'},
   {label: 'Inking', icon: 'pi pi-pencil'},
@@ -35,7 +32,6 @@ const navItems = ref([
 
 const activeTab = ref(props.modelValue)
 
-// Methods
 const onTabChange = (event) => {
   activeTab.value = event.index
   emit('update:modelValue', event.index)

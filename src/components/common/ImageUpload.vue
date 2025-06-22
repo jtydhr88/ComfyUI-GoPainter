@@ -28,7 +28,6 @@
         </div>
       </div>
 
-      <!-- 简单的文件信息显示（如果有文件但没有预览） -->
       <div v-if="uploadedFile && !previewImage" class="mt-4 p-3 bg-gray-50 rounded-lg">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-2">
@@ -54,7 +53,6 @@ import Card from 'primevue/card'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
 
-// Props
 const props = defineProps({
   uploadedFile: {
     type: [File, null],
@@ -66,10 +64,8 @@ const props = defineProps({
   }
 })
 
-// Emits
 const emit = defineEmits(['file-selected', 'update:uploadedFile', 'update:previewImage'])
 
-// Format file size helper
 function formatFileSize(bytes) {
   if (bytes === 0) return '0 Bytes'
   const k = 1024
@@ -78,7 +74,6 @@ function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-// Methods
 const onFileSelect = (event) => {
   const file = event.files[0]
   handleFile(file)
@@ -105,11 +100,8 @@ const handleFile = (file) => {
     console.warn('Invalid file type. Please select an image.')
     return
   }
-
-  // Update uploaded file
   emit('update:uploadedFile', file)
 
-  // Create preview
   const reader = new FileReader()
   reader.onload = (e) => {
     emit('update:previewImage', e.target.result)
@@ -120,7 +112,6 @@ const handleFile = (file) => {
   }
   reader.readAsDataURL(file)
 
-  // Emit file selected event
   emit('file-selected', file)
 }
 
@@ -140,7 +131,6 @@ const pasteFromClipboard = async () => {
     console.warn('No image found in clipboard')
   } catch (err) {
     console.warn('Failed to read clipboard:', err)
-    // Fallback: show a message to user
     alert('Unable to access clipboard. Please use drag & drop or file selection instead.')
   }
 }
@@ -153,7 +143,6 @@ const removeImage = () => {
 </script>
 
 <style scoped>
-/* 可以添加一些自定义样式 */
 .border-dashed:hover {
   border-color: #9ca3af;
 }

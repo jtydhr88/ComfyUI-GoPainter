@@ -11,12 +11,10 @@ export const useLineartStore = defineStore('lineart', () => {
   const outputImage = ref<string | null>(null)
   const processing = ref<boolean>(false)
 
-  // 参数状态
   const aiStrength = ref<number>(0.6)
   const bold = ref<number>(0)
   const stroke = ref<number>(0)
   const prompt = ref<string>('')
-  // 移除 autoPrompt
   const transparent = ref<boolean>(false)
 
   function setUploadedFile(file: File | null) {
@@ -51,13 +49,10 @@ export const useLineartStore = defineStore('lineart', () => {
     prompt.value = value
   }
 
-  // 移除 setAutoPrompt
-
   function setTransparent(value: boolean) {
     transparent.value = value
   }
 
-  // 重置所有状态的方法
   function reset() {
     uploadedFile.value = null
     previewImage.value = null
@@ -67,7 +62,6 @@ export const useLineartStore = defineStore('lineart', () => {
     bold.value = 0
     stroke.value = 0
     prompt.value = ''
-    // 移除 autoPrompt.value = false
     transparent.value = false
   }
 
@@ -80,7 +74,6 @@ export const useLineartStore = defineStore('lineart', () => {
     bold,
     stroke,
     prompt,
-    // 移除 autoPrompt,
     transparent,
 
     setUploadedFile,
@@ -91,7 +84,6 @@ export const useLineartStore = defineStore('lineart', () => {
     setBold,
     setStroke,
     setPrompt,
-    // 移除 setAutoPrompt,
     setTransparent,
     reset
   }

@@ -70,7 +70,7 @@ export class ComfyUIWebSocket {
   public connect(promptId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       console.log('🔌 Attempting to connect WebSocket for promptId:', promptId)
-      this.close() // Close any existing connection
+      this.close()
 
       const wsUrl = `ws://127.0.0.1:8188/ws?clientId=${this.clientId}`
       console.log('🔗 WebSocket URL:', wsUrl)
@@ -156,17 +156,15 @@ export class ComfyUIWebSocket {
         this.status.isProcessing = false
         this.notifyStatusChange()
 
-        // 保存 promptId，避免在 close() 后丢失
         const currentPromptId = this.status.promptId
         console.log('💾 Saved promptId before close:', currentPromptId)
 
-        // Get the result first, then close
         setTimeout(() => {
           console.log('🔍 Getting execution result for saved promptId:', currentPromptId)
           this.getExecutionResult(currentPromptId!)
             .then(() => {
               console.log('✅ Execution result retrieved, now resetting')
-              // Force reset after getting result
+
               setTimeout(() => this.resetStatus(), 1000)
             })
             .catch((error) => {
@@ -175,7 +173,6 @@ export class ComfyUIWebSocket {
             })
         }, 1000)
 
-        // Hide status after a longer delay to allow result retrieval
         setTimeout(() => {
           this.status.visible = false
         }, 5000)
@@ -198,16 +195,14 @@ export class ComfyUIWebSocket {
         this.status.isProcessing = false
         this.notifyStatusChange()
 
-        // 保存 promptId，避免在 close() 后丢失
         const currentPromptId = this.status.promptId
         console.log('💾 Saved promptId before close:', currentPromptId)
 
-        // Get the result first, then close
         console.log('🔍 Getting execution result for saved promptId:', currentPromptId)
         this.getExecutionResult(currentPromptId!)
           .then(() => {
             console.log('✅ Execution result retrieved, now resetting')
-            // Force reset after getting result
+
             setTimeout(() => this.resetStatus(), 1000)
           })
           .catch((error) => {
@@ -215,7 +210,6 @@ export class ComfyUIWebSocket {
             setTimeout(() => this.resetStatus(), 1000)
           })
 
-        // Hide status after a longer delay to allow result retrieval
         setTimeout(() => {
           this.status.visible = false
         }, 5000)
@@ -231,7 +225,6 @@ export class ComfyUIWebSocket {
   private async getExecutionResult(promptId: string): Promise<void> {
     console.log('🔍 Getting execution result for promptId:', promptId)
 
-    // 添加重试机制，因为有时候结果还没准备好
     const maxRetries = 3
     let retryCount = 0
 
@@ -259,12 +252,10 @@ export class ComfyUIWebSocket {
 
           let hasAnyOutput = false
 
-          // Process the outputs
           for (const nodeId in history[promptId].outputs) {
             const nodeOutput = history[promptId].outputs[nodeId]
             console.log(`🔍 Processing node ${nodeId} output:`, nodeOutput)
 
-            // Handle images
             if (nodeOutput.images && nodeOutput.images.length > 0) {
               console.log(`🖼️ Found ${nodeOutput.images.length} images in node ${nodeId}`)
               hasAnyOutput = true
@@ -289,24 +280,20 @@ export class ComfyUIWebSocket {
               }
             }
 
-            // Handle text outputs
             if (nodeOutput.text && nodeOutput.text.length > 0) {
               console.log('📝 Found text output:', nodeOutput.text)
               result.text = nodeOutput.text[0]
               hasAnyOutput = true
             }
 
-            // Handle string outputs
             if (nodeOutput.string && nodeOutput.string.length > 0) {
               console.log('📝 Found string output:', nodeOutput.string)
               result.text = nodeOutput.string[0]
               hasAnyOutput = true
             }
 
-            // Store raw data
             result.data[nodeId] = nodeOutput
 
-            // 检查是否有任何类型的输出
             if (Object.keys(nodeOutput).length > 0) {
               hasAnyOutput = true
             }
@@ -316,7 +303,7 @@ export class ComfyUIWebSocket {
             console.log('✅ Final result object:', result)
             console.log('📞 Calling onResult callback with result')
             this.callbacks.onResult?.(result)
-            return // 成功获取结果，退出函数
+            return
           } else {
             console.log('⚠️ No meaningful outputs found, but history exists')
             if (retryCount < maxRetries - 1) {
@@ -336,7 +323,6 @@ export class ComfyUIWebSocket {
           }
         }
 
-        // 如果到这里说明所有重试都失败了
         console.log('❌ All retries exhausted, no valid outputs found')
         this.callbacks.onError?.('No outputs found after multiple attempts')
         return
@@ -381,7 +367,6 @@ export class ComfyUIWebSocket {
       this.websocket.close()
       this.websocket = null
     }
-    // 不立即重置状态，让结果获取完成后再重置
   }
 
   public forceReset() {
@@ -416,5 +401,4 @@ export class ComfyUIWebSocket {
   }
 }
 
-// 创建一个全局实例
 export const comfyUIWebSocket = new ComfyUIWebSocket()

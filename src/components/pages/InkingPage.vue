@@ -65,7 +65,6 @@ const canSend = computed(() => {
   return uploadedFile.value !== null
 })
 
-// Methods
 const onFileSelect = (file) => {
   console.log('File selected:', file?.name || 'null')
 

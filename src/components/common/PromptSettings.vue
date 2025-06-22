@@ -20,7 +20,6 @@
           class="w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
 
-        <!-- Processing Status Display -->
         <Card v-if="wsClient.status.visible" class="rounded-lg border border-blue-200 bg-blue-50">
           <template #content>
             <div class="flex items-center justify-center space-x-3 py-2">
@@ -60,7 +59,6 @@
           />
         </div>
 
-        <!-- 错误消息显示 -->
         <div v-if="errorMessage" class="text-xs text-red-500 text-center bg-red-50 p-2 rounded">
           {{ errorMessage }}
         </div>
@@ -81,7 +79,6 @@ import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'
 import { ComfyUIWebSocket } from '@/utils/websocket'
 
-// Props
 const props = defineProps({
   prompt: {
     type: String,
@@ -97,21 +94,17 @@ const props = defineProps({
   }
 })
 
-// Emits
 const emit = defineEmits(['update:prompt'])
 
 const lastResult = ref(null)
 const errorMessage = ref('')
 
-// 创建专门用于获取 prompt 的 WebSocket 客户端
 const wsClient = new ComfyUIWebSocket()
 
-// 设置回调函数
 wsClient
   .onResult((result) => {
     console.log('Received prompt result:', result)
 
-    // 处理文本结果 - prompt 建议
     if (result.text) {
       const currentPrompt = props.prompt
       const newSuggestions = result.text
@@ -125,11 +118,9 @@ wsClient
         count: newSuggestions.split(', ').length
       }
     } else if (result.data) {
-      // 处理其他数据格式
       let suggestions = []
       let originalCaption = ''
 
-      // 遍历所有节点输出寻找建议
       for (const nodeId in result.data) {
         const nodeOutput = result.data[nodeId]
 
@@ -141,7 +132,6 @@ wsClient
           suggestions.push(...nodeOutput.string)
         }
 
-        // 检查是否有原始描述
         if (nodeOutput.caption) {
           originalCaption = nodeOutput.caption
         }
@@ -214,7 +204,6 @@ const fetchSmartSuggestions = async () => {
     console.log('Received smart suggestions response:', result)
 
     if (result.prompt_id) {
-      // 使用 WebSocket 连接监控获取 prompt 的进度
       await wsClient.connect(result.prompt_id)
     } else {
       console.error('No prompt_id received from server')
@@ -270,7 +259,6 @@ const getStatusMessage = () => {
   }
 }
 
-// Cleanup on component unmount
 onUnmounted(() => {
   wsClient.close()
 })
