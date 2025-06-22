@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-gopainter"
+description = "ComfyUI GoPainter"
+version = "0.0.1"
+license = {file = "LICENSE"}
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/jtydhr88/ComfyUI_frontend_vue_basic"
+#  Used by Comfy Registry https://comfyregistry.org
+[tool.comfy]
+PublisherId = "jtydhr88"
+DisplayName = "ComfyUI GoPainter"
+Icon = ""
+includes = ['js']
