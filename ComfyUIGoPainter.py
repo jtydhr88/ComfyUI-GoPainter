@@ -1,4 +1,4 @@
-class ComfyUIGoPainter:
+class ComfyUIStableStudio:
     def __init__(self):
         pass
 
@@ -21,9 +21,9 @@ class ComfyUIGoPainter:
         return None,
 
 NODE_CLASS_MAPPINGS = {
-    "ComfyUIGoPainter": ComfyUIGoPainter
+    "ComfyUIStableStudio": ComfyUIStableStudio
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "ComfyUIGoPainter": "GoPainter"
+    "ComfyUIStableStudio": "StableStudio"
 }

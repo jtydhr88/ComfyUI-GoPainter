@@ -1,22 +1,16 @@
-import { app } from "../../../scripts/app.js";
 import { ref } from "vue";
-
-const defineStore = app.extensionManager.defineStore
+import { defineStore } from "pinia";
 
 export const useLineartStore = defineStore('lineart', () => {
-
   const uploadedFile = ref<File | null>(null)
   const previewImage = ref<string | null>(null)
-
   const outputImage = ref<string | null>(null)
   const processing = ref<boolean>(false)
-
   const aiStrength = ref<number>(0.6)
   const bold = ref<number>(0)
   const stroke = ref<number>(0)
   const prompt = ref<string>('')
   const transparent = ref<boolean>(false)
-
   function setUploadedFile(file: File | null) {
     uploadedFile.value = file
   }

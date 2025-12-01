@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 限定样式只作用于 gopainter-root 容器内 */
+#gopainter-root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  color: #374151;
+
+  /* 基础重置 */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+}
